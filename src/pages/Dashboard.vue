@@ -76,7 +76,8 @@
           <h3>{{ voteNull.whiteVotes + voteNull.nullVotes + votosValidos }}</h3>
         </div>
       </div>
-      <div class="p-col p-lg-4">
+
+      <!-- <div class="p-col p-lg-4">
         <div class="card summary">
           <span class="title">LISTA GANADORA</span>
           <h3>{{ listaGanadora }}</h3>
@@ -84,7 +85,7 @@
             >Con el <b> {{ porcentaje }}%</b> de los votos
           </span>
         </div>
-      </div>
+      </div> -->
       <!-- <div class="p-col p-lg-3">
         <div class="card summary">
           <span class="title">ESCRUTINIO</span>
