@@ -68,7 +68,7 @@
     </div>
 
     <div
-      class="p-grid dashboard p-text-center"
+      class="p-grid dashboard p-text-center "
       v-for="voteNull in voteNull"
       :key="voteNull.id"
     >
@@ -122,7 +122,7 @@
           </h4>
         </div>
       </div>
-      <div class="p-col p-lg-2 p-mt-2">
+      <div class="p-col p-lg-3 p-mt-2">
         <div class="card summary">
           <span class="title">PROCESADOS</span>
           <h3>{{ voteNull.whiteVotes + voteNull.nullVotes + votosValidos }}</h3>
@@ -142,7 +142,7 @@
           </h4>
         </div>
       </div>
-      <div class="p-col p-lg-2 p-mt-2">
+      <div class="p-col p-lg-3 p-mt-2">
         <div class="card summary">
           <spam class="title">SIN PROCESAR</spam>
           <h3>
