@@ -7,15 +7,16 @@
     <div id="child" class="p-d-flex p-ai-center p-jc-center">
       <div class="card" style="background-color: rgba(255, 255, 255, 0.7)">
         <div class="p-d-flex p-jc-center p-mt-3">
+            <!-- style="height: 150px; width: 150px" -->
           <img
-            style="height: 150px; width: 150px"
+          style="width: 350px"
             src="assets/layout/images/Logo2.png"
-            alt="nooo "
+            alt="logo instituto"
           />
         </div>
         <br />
-        <p class="p-text-center p-mb-4">Bienvenido, por favor inicie sesion</p>
-        <div class="p-m-2">
+        <h4 class="p-text-center p-mb-4">Bienvenido, por favor inicie sesion</h4>
+        <div class="p-p-4">
           <span class="p-float-label p-input-icon-right p-mb-5">
             <i class="pi pi-user" />
             <InputText

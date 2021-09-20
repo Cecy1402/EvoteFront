@@ -3,6 +3,17 @@ import axios from "axios";
 let url = process.env.VUE_APP_APIURL;
 export default class UserService {
   //traer un get de la base de datos
+  async getUsers() {
+    return axios
+      .get(url + `/Users`, {
+        headers: {
+          Authorization: "token " + sessionStorage.getItem("jwt"),
+        },
+      })
+      .then((res) => res.data);
+  }
+
+
   async UserLogin(user, pass) {
     let result = await axios.post(url + `/Users/login/`, {
       username: user,

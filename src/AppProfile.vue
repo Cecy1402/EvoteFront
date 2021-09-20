@@ -39,6 +39,8 @@ export default {
       sessionStorage.removeItem("jwt");
       sessionStorage.removeItem("user");
       sessionStorage.removeItem("is_superuser");
+      sessionStorage.removeItem("ya_voto");
+      sessionStorage.removeItem("periodo_id");
 
       this.$router.push("/login");
     },

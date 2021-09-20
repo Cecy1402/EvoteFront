@@ -1,5 +1,6 @@
 <template>
   <div class="card">
+    <Toast />
     <Dialog
       header="Confirmación"
       :visible.sync="displayConfirmation"

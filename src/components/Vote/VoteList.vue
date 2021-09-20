@@ -206,7 +206,7 @@ export default {
     },
     getCandidates() {
       this.candidateService
-        .getCandidates()
+        .getCandidatesActuales(sessionStorage.getItem("period_id"))
         .then((candidates) => {
           
           this.candidatesList = candidates.results;
@@ -263,6 +263,8 @@ export default {
     logout() {
       sessionStorage.removeItem("jwt");
       sessionStorage.removeItem("user");
+      sessionStorage.removeItem("is_superuser");
+      sessionStorage.removeItem("periodo_id");
       this.$router.push("/login");
     },
   },

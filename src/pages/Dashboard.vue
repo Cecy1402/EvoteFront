@@ -15,6 +15,16 @@
             <label for="dropdown">PERIODOS</label>
           </span>
         </div>
+        <div class="p-m-2" v-if="displayReport == 'true'">
+          <span class="p-float-label">
+            <Button
+              label="Reporte Estudiantes"
+              icon="pi pi-print"
+              class="p-mr-2"
+              @click="openLink()"
+            />
+          </span>
+        </div>
       </div>
 
       <div class="p-grid p-text-center p-jc-center">
@@ -40,7 +50,17 @@
               }}{{ list.candidate_set[0].student.apellidos }}
             </h5>
             <!-- <p>{{list.candidate_set[0].position}}</p> -->
-            <h2>{{ list.votes }}</h2>
+            <h2>Votos {{ list.votes }}</h2>
+
+            <h4>
+              (
+              {{
+                parseFloat(
+                  list.votes != 0 ? (list.votes / userCount) * 100 : 0
+                ).toFixed(2)
+              }}
+              % )
+            </h4>
           </div>
         </div>
       </div>
@@ -56,27 +76,102 @@
         <div class="card summary">
           <span class="title">BLANCOS</span>
           <h3>{{ voteNull.whiteVotes }}</h3>
+
+          <h4>
+            (
+            {{
+              parseFloat(
+                voteNull.whiteVotes != 0
+                  ? (voteNull.whiteVotes / userCount) * 100
+                  : 0
+              ).toFixed(2)
+            }}
+            % )
+          </h4>
         </div>
       </div>
       <div class="p-col p-lg-2 p-mt-2">
         <div class="card summary">
           <span class="title">NULOS</span>
           <h3>{{ voteNull.nullVotes }}</h3>
+          <h4>
+            (
+            {{
+              parseFloat(
+                voteNull.nullVotes != 0
+                  ? (voteNull.nullVotes / userCount) * 100
+                  : 0
+              ).toFixed(2)
+            }}
+            % )
+          </h4>
         </div>
       </div>
       <div class="p-col p-lg-2 p-mt-2">
         <div class="card summary">
           <span class="title">VALIDOS </span>
           <h3>{{ votosValidos }}</h3>
+          <h4>
+            (
+            {{
+              parseFloat(
+                votosValidos != 0 ? (votosValidos / userCount) * 100 : 0
+              ).toFixed(2)
+            }}
+            % )
+          </h4>
         </div>
       </div>
       <div class="p-col p-lg-2 p-mt-2">
         <div class="card summary">
-          <span class="title">TOTAL</span>
+          <span class="title">PROCESADOS</span>
           <h3>{{ voteNull.whiteVotes + voteNull.nullVotes + votosValidos }}</h3>
+
+          <h4>
+            (
+            {{
+              parseFloat(
+                voteNull.whiteVotes + voteNull.nullVotes + votosValidos != 0
+                  ? ((voteNull.whiteVotes + voteNull.nullVotes + votosValidos) /
+                      userCount) *
+                      100
+                  : 0
+              ).toFixed(2)
+            }}
+            % )
+          </h4>
         </div>
       </div>
+      <div class="p-col p-lg-2 p-mt-2">
+        <div class="card summary">
+          <spam class="title">SIN PROCESAR</spam>
+          <h3>
+            {{
+              userCount -
+              (voteNull.whiteVotes + voteNull.nullVotes + votosValidos)
+            }}
+          </h3>
 
+          <h4>
+            (
+            {{
+              parseFloat(
+                userCount -
+                  (voteNull.whiteVotes + voteNull.nullVotes + votosValidos) !=
+                  0
+                  ? ((userCount -
+                      (voteNull.whiteVotes +
+                        voteNull.nullVotes +
+                        votosValidos)) /
+                      userCount) *
+                      100
+                  : 0
+              ).toFixed(2)
+            }}
+            % )
+          </h4>
+        </div>
+      </div>
       <!-- <div class="p-col p-lg-4">
         <div class="card summary">
           <span class="title">LISTA GANADORA</span>
@@ -108,9 +203,11 @@
 import CandidateService from "../service/CandidateService";
 import PeriodService from "../service/PeriodService";
 import ResultService from "../service/ResultService";
+import UserService from "../service/UserService";
 export default {
   data() {
     return {
+      displayReport: sessionStorage.getItem("is_superuser"),
       porcentaje: 0,
       votosGanador: 0,
       listaGanadora: "",
@@ -124,6 +221,7 @@ export default {
       nodes: null,
       columns: null,
       expandedKeys: {},
+      userCount: 0,
       chartData: {
         labels: ["PES", "EDU", "SLM", "VOTOS BLANCOS", "VOTOS NULOS"],
         datasets: [
@@ -144,19 +242,31 @@ export default {
   },
   periodService: null,
   resultService: null,
+  userService: null,
 
   created() {
     this.periodService = new PeriodService();
     this.candidatoService = new CandidateService();
     this.resultService = new ResultService();
+    this.userService = new UserService();
   },
 
   mounted() {
     this.getPeriod();
+    this.getUsers();
     // this.getResults();
     //this.getVoteNull();
   },
   methods: {
+    getUsers() {
+      this.userService.getUsers().then((element) => {
+        this.userCount = element.count - 2;
+      });
+    },
+    openLink() {
+      let url = process.env.VUE_APP_APIURL + "/report";
+      window.open(url);
+    },
     updateResults() {
       var periodId = this.periodSelected.code;
       this.getResults(periodId);
@@ -179,6 +289,7 @@ export default {
           this.periodos.forEach((element) => {
             if (element.actual) {
               this.periodSelected = element;
+              sessionStorage.setItem("period_id", element.code);
             }
           });
 
@@ -208,8 +319,6 @@ export default {
           this.porcentaje = Math.round(
             (this.votosGanador / this.votosValidos) * 100
           );
-
-          console.log("resuklt", this.votosValidos);
         })
         .catch((error) => {
           console.log("ERROR: ", error);

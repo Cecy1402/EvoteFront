@@ -28,7 +28,12 @@
                 :auto="true"
                 @uploader="onUpload"
               />
-              <img :src="fotoListaB64" width="100" height="100" alt="SIN FOTO" />
+              <img
+                :src="fotoListaB64"
+                width="100"
+                height="100"
+                alt="SIN FOTO"
+              />
               <!-- <img src="assets/layout/images/logo.svg" alt="" /> ¡  -->
             </div>
             <div
@@ -60,6 +65,7 @@
                     :options="periodos"
                     optionLabel="name"
                     optionValue="code"
+                    :change="getCandidates()"
                   />
                   <label>Periodo</label>
                 </span>
@@ -191,6 +197,7 @@ export default {
     return {
       fotoListaB64: "",
       periodos: [],
+      estudiantesCandidatos: null,
       listId: "",
       periodSelected: null,
       listName: "",
@@ -265,8 +272,10 @@ export default {
     this.candidateService = new CandidateService();
     this.userService = new UserService();
   },
+
   mounted() {
     this.getPeriod();
+
     if (this.candidateList != null) {
       this.fotoListaB64 = this.candidateList.foto;
       this.listId = this.candidateList.id;
@@ -291,11 +300,29 @@ export default {
     }
   },
   methods: {
+    getCandidates() {
+      if (this.periodSelected != null) {
+        this.estudiantesCandidatos = [];
+       
+        this.candidateService
+          .getCandidatesActuales(this.periodSelected)
+          .then((candidates) => {
+            candidates.results.forEach((element) => {
+              element.candidate_set.forEach((element) => {
+                this.estudiantesCandidatos.push(element.student);
+              });
+            });
+          })
+          .catch((err) => {
+            console.log("ERROR: ", err);
+          });
+      }
+    },
+   
     subirImagenCandidatos(event, tab) {
       var reader = new FileReader();
       reader.readAsDataURL(event.files[0]);
       reader.onload = () => {
-        console.log(reader.result);
         tab.foto = reader.result;
       };
     },
@@ -311,41 +338,65 @@ export default {
       };
     },
     searchStudent(student) {
-      if (student.student.length == 10) {
-        this.userService
-          .UserSearch(student.student)
-          .then((result) => {
-            console.log(result);
-            if (result.count == 1) {
-              student.name =
-                result.results[0].nombres + " " + result.results[0].apellidos;
-              student.degree = result.results[0].carrera;
-              student.course = result.results[0].ciclo;
-            } else {
+      if (this.estudiantesCandidatos != null) {
+        if (student.student.length == 10) {
+          this.userService
+            .UserSearch(student.student)
+            .then((result) => {
+              if (result.count == 1) {
+                var alunmo = this.estudiantesCandidatos.find(
+                  (element) =>
+                    (element.identificacion = result.results[0].identificacion)
+                );
+                if (alunmo != null) {
+                  this.$toast.add({
+                    severity: "warn",
+                    summary: "Mensaje de advertencia",
+                    detail: "El estudiante ya se encuentra en una lista",
+                    life: 3000,
+                  });
+                } else {
+                  console.log(result);
+                  student.name =
+                    result.results[0].nombres +
+                    " " +
+                    result.results[0].apellidos;
+                  student.degree = result.results[0].carrera;
+                  student.course = result.results[0].ciclo;
+                }
+              } else {
+                this.$toast.add({
+                  severity: "warn",
+                  summary: "Mensaje de advertencia",
+                  detail: "No se encontro un estudiante con esa cedula",
+                  life: 3000,
+                });
+                this.cleanStudent(student);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
               this.$toast.add({
-                severity: "warn",
-                summary: "Warn Message",
-                detail: "No se encontro un estudiante con esa cedula",
+                severity: "error",
+                summary: "Error Message",
+                detail: "Lo sentimos ocurrio un error",
                 life: 3000,
               });
-              this.cleanStudent(student);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            this.$toast.add({
-              severity: "error",
-              summary: "Error Message",
-              detail: "Lo sentimos ocurrio un error",
-              life: 3000,
             });
+        } else {
+          this.cleanStudent(student);
+          this.$toast.add({
+            severity: "warn",
+            summary: "Mensaje de advertencia",
+            detail: "La Cedula debe tener 10 caracteres",
+            life: 3000,
           });
+        }
       } else {
-        this.cleanStudent(student);
         this.$toast.add({
           severity: "warn",
-          summary: "Warn Message",
-          detail: "La Cedula debe tener 10 caracteres",
+          summary: "Mensaje de advertencia",
+          detail: "debe selecionar un Periodo",
           life: 3000,
         });
       }
@@ -387,7 +438,7 @@ export default {
       if (this.candidateList != null) {
         this.candidateService
           .patchCandidates(this.listId, list)
-          .then((result) => {
+          .then(() => {
             this.$toast.add({
               severity: "info",
               summary: "Info Message",
@@ -395,8 +446,6 @@ export default {
               life: 3000,
             });
             this.closeForm();
-            console.log(result);
-            console.log("actualizar");
           })
           .catch((err) => {
             console.log("ERROR: ", err);
@@ -404,7 +453,7 @@ export default {
       } else {
         this.candidateService
           .postCandidates(list)
-          .then((result) => {
+          .then(() => {
             this.$toast.add({
               severity: "info",
               summary: "Info Message",
@@ -412,8 +461,6 @@ export default {
               life: 3000,
             });
             this.closeForm();
-            console.log(result);
-            console.log("nuevo");
           })
           .catch((err) => {
             console.log("ERROR: ", err);

@@ -1,7 +1,7 @@
 <template>
   <!-- <BlockUI :blocked="blockedDocument" :fullScreen="true"></BlockUI> -->
   <div class="">
-    <Toast />
+    <!-- <Toast /> -->
     <div v-if="displayList">
       <candidates-list
         @open-form="setDisplayList($event)"

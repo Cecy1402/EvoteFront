@@ -12,6 +12,15 @@ export default class CandidateService {
       })
       .then((res) => res.data);
   }
+  async getCandidatesActuales(id) {
+    return axios
+      .get(url + `/ListInfo/?period=${id}`, {
+        headers: {
+          Authorization: "token " + sessionStorage.getItem("jwt"),
+        },
+      })
+      .then((res) => res.data);
+  }
   async deleteCandidates(id) {
     return axios
       .delete(url + `/ListInfo/${id}`, {
