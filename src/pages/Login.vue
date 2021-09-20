@@ -93,7 +93,7 @@ export default {
             
             sessionStorage.setItem("user", JSON.stringify(resp.user));
             //this.$router.push("/");
-            window.location = "/";
+            window.location = "/EvoteFront/";
           } else {
             var horaActual = moment().toDate();
 
@@ -101,7 +101,7 @@ export default {
               sessionStorage.setItem("user", JSON.stringify(resp.user));
               sessionStorage.setItem("ya_voto", result.vote);
               //this.$router.push("/votar");
-              window.location = "/votar";
+              window.location = "/EvoteFront/#/votar";
             } else {
               this.error = "Hora limite ";
             }
@@ -132,7 +132,7 @@ export default {
                   sessionStorage.setItem("user", JSON.stringify(resp.user));
                   sessionStorage.setItem("is_superuser", true);
                   //this.$router.push("/");
-                  window.location = "/";
+                  window.location = "/EvoteFront";
                 } else {
                   sessionStorage.setItem("is_superuser", false);
                   sessionStorage.setItem("jwt", resp.access_token);
