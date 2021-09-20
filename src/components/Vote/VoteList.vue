@@ -37,7 +37,7 @@
               @click="cancel()"
               class="p-button-text p-button-success"
             />
-            <Button label="Yes" icon="pi pi-check" class="p-button-success" @click="confirmVote()" />
+            <Button label="Si" icon="pi pi-check" class="p-button-success" @click="confirmVote()" />
           </template>
         </Dialog>
 

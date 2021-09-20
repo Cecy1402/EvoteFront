@@ -99,7 +99,7 @@ export default {
           .then((result) => {
             this.$toast.add({
               severity: "info",
-              summary: "Info Message",
+              summary: "Mensaje informativo",
               detail: "Registro actualizado correctamente",
               life: 3000,
             });
@@ -116,7 +116,7 @@ export default {
           .then((result) => {
             this.$toast.add({
               severity: "info",
-              summary: "Info Message",
+              summary: "Mensaje informativo",
               detail: "Registro creado correctamente",
               life: 3000,
             });

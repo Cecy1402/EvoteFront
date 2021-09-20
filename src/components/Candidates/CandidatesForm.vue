@@ -378,7 +378,7 @@ export default {
               console.log(err);
               this.$toast.add({
                 severity: "error",
-                summary: "Error Message",
+                summary: "Mensaje de error",
                 detail: "Lo sentimos ocurrio un error",
                 life: 3000,
               });
@@ -441,7 +441,7 @@ export default {
           .then(() => {
             this.$toast.add({
               severity: "info",
-              summary: "Info Message",
+              summary: "Mensaje informativo",
               detail: "Registro actualizado correctamente",
               life: 3000,
             });
@@ -456,7 +456,7 @@ export default {
           .then(() => {
             this.$toast.add({
               severity: "info",
-              summary: "Info Message",
+              summary: "Mensaje informativo",
               detail: "Registro creado correctamente",
               life: 3000,
             });

@@ -19,7 +19,7 @@
           class="p-button-text"
         />
         <Button
-          label="Yes"
+          label="Si"
           icon="pi pi-check"
           @click="deleteList()"
           class="p-button-text p-button-danger"
@@ -171,7 +171,7 @@ export default {
           //  result;
           this.$toast.add({
             severity: "info",
-            summary: "info Message",
+            summary: "Mensaje informativo",
             detail: "Eliminado correctamente",
             life: 3000,
           });

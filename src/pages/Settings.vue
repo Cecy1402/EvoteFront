@@ -114,7 +114,7 @@ export default {
       this.update(this.hFin.id, hEnd);
       this.$toast.add({
         severity: "info",
-        summary: "info Message",
+        summary: "Mensaje informativo",
         detail: "Actulizado Correctamente",
         life: 3000,
       });
