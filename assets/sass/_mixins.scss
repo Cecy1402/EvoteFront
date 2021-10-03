@@ -1,0 +1,38 @@
+@mixin border-radius-left($val) {
+    border-top-left-radius: $val;
+    border-bottom-left-radius: $val;
+}
+
+@mixin border-radius-bottom($val) {
+    border-bottom-left-radius: $val;
+    border-bottom-right-radius: $val;
+}
+
+@mixin background-gradient-left2right($start-color, $end-color) {
+    background-color: $start-color;
+    background-image:         linear-gradient(left, $start-color, $end-color);
+    filter:            progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$start-color}', endColorstr='#{$end-color}', gradientType='1');
+}
+
+@mixin background-gradient-top2bottom($start-color, $end-color) {
+    background-color: $start-color;
+    background-image:         linear-gradient(to bottom, $start-color, $end-color);
+    filter:            progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$start-color}', endColorstr='#{$end-color}');
+}
+
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie);
+}
+
+@mixin clearfix() {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
